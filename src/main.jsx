@@ -1,11 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import './index.css'
-import App from './App'
+import { Route, BrowserRouter, Routes } from 'react-router-dom'
+import CreateEmployee from './pages/CreateEmployee'
+import EmployeeList from './pages/EmployeeList'
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+	<BrowserRouter>
+		<Routes>
+			<Route path="/" element={<CreateEmployee />}></Route>
+			<Route path="/employee-list" element={<EmployeeList />}></Route>
+			<Route path="*" element={<h1>404</h1>}></Route>
+		</Routes>
+	</BrowserRouter>,
+	document.getElementById('root')
 )

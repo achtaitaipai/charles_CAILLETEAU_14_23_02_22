@@ -1,0 +1,35 @@
+html {
+	font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+header {
+	width: 40%;
+	margin: auto;
+	text-align: center;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	width: max(50%, 400px);
+	margin: auto;
+}
+
+label {
+	margin: 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.3125rem;
+}
+fieldset {
+	display: flex;
+	flex-direction: column;
+}
+
+input,
+select {
+	width: 50%;
+}
+
+input[type='submit'] {
+	align-self: center;
+}
