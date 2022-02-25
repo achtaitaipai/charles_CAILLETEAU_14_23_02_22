@@ -1,11 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import React from 'react'
-import './style.css'
-/**
- *
- * @param {*} param0
- * @returns
- */
+import { StyledDropDown } from './style.js'
+
 export default function DropDown({ listItem, selected = 0, handleSelect }) {
 	const getSelected = slt => {
 		if (typeof slt === 'string') {
@@ -81,35 +77,33 @@ export default function DropDown({ listItem, selected = 0, handleSelect }) {
 	}
 
 	return (
-		<React.StrictMode>
-			<div className="dropdown" ref={dropDownRef} onKeyDown={expanded ? handleKeyDown : null}>
-				<button className="dropdown__selected" ref={selectedRef} onClick={selectClick} aria-haspopup="listbox" aria-expanded={expanded}>
-					{' '}
-					{selectedItem}{' '}
-					<svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
-						{expanded ? <polygon points="0 9, 10 9, 5 2" /> : <polygon points="0 1, 10 1, 5 8" />}
-					</svg>
-				</button>
-				<ul role="listbox" tabIndex={-1} ref={listBoxRef} style={{ opacity: expanded ? '1' : '0' }} className="dropdown__list">
-					{expanded &&
-						listItem.map((item, id) => {
-							return (
-								<li key={id} role="option" className="dropdown__item">
-									<button
-										className="dropdown__itemBtn"
-										data-value={id}
-										onClick={optionClick}
-										tabIndex="-1"
-										onMouseEnter={handleMouseEnter}
-										aria-selected={id === currentItem}
-									>
-										{item}
-									</button>
-								</li>
-							)
-						})}
-				</ul>
-			</div>
-		</React.StrictMode>
+		<StyledDropDown className="dropdown" ref={dropDownRef} onKeyDown={expanded ? handleKeyDown : null}>
+			<button className="selected" ref={selectedRef} onClick={selectClick} aria-haspopup="listbox" aria-expanded={expanded}>
+				{' '}
+				{selectedItem}{' '}
+				<svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
+					{expanded ? <polygon points="0 9, 10 9, 5 2" /> : <polygon points="0 1, 10 1, 5 8" />}
+				</svg>
+			</button>
+			<ul role="listbox" tabIndex={-1} ref={listBoxRef} style={{ opacity: expanded ? '1' : '0' }}>
+				{expanded &&
+					listItem.map((item, id) => {
+						return (
+							<li key={id} role="option" className="dropdown__item">
+								<button
+									className="itemBtn"
+									data-value={id}
+									onClick={optionClick}
+									tabIndex="-1"
+									onMouseEnter={handleMouseEnter}
+									aria-selected={id === currentItem}
+								>
+									{item}
+								</button>
+							</li>
+						)
+					})}
+			</ul>
+		</StyledDropDown>
 	)
 }
