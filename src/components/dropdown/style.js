@@ -18,6 +18,7 @@ export const StyledDropDown = styled.div`
 		text-align: left;
 		display: flex;
 		align-items: center;
+		margin-right: 10px;
 		cursor: pointer;
 	}
 	svg {
@@ -25,6 +26,7 @@ export const StyledDropDown = styled.div`
 		margin-left: auto;
 	}
 	ul {
+		z-index: 1000;
 		width: 100%;
 		box-sizing: border-box;
 		list-style: none;

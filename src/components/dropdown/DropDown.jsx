@@ -29,6 +29,10 @@ export default function DropDown({ listItem, selected = 0, handleSelect }) {
 	}
 
 	useEffect(() => {
+		setSelectedItem(getSelected(selected))
+	}, [selected])
+
+	useEffect(() => {
 		const handleClickOutside = e => {
 			if (dropDownRef.current && !dropDownRef.current.contains(e.target)) {
 				close()
@@ -73,7 +77,9 @@ export default function DropDown({ listItem, selected = 0, handleSelect }) {
 	const selectItem = id => {
 		setSelectedItem(getSelected(id))
 		close()
-		handleSelect(id, listItem[id])
+		if (handleSelect !== undefined) {
+			handleSelect(id, listItem[id])
+		}
 	}
 
 	return (

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import '../assets/style.css'
-import DropDown from '../components/DropDown'
+import DateInput from '../components/dateInput/DateInput'
+import DropDown from '../components/dropdown/DropDown'
 
 export default function CreateEmployee() {
 	return (
@@ -17,6 +18,7 @@ export default function CreateEmployee() {
 						selected={'2em'}
 						handleSelect={(id, value) => alert(id + ' ' + value)}
 					></DropDown>
+					<DateInput />
 					<label>
 						First Name
 						<input type="text" name="firstName"></input>
