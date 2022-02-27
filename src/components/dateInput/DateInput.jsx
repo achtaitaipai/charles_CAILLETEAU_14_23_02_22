@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import DropDown from '../dropdown/DropDown'
 import { StyledDateInput } from './style'
 
-export default function DateInput() {
+export default function DateInput({ min, max }) {
 	const monthName = n => {
 		const date = new Date(0, n, 0)
 		return date.toLocaleDateString('fr-FR', { month: 'long' })
@@ -22,15 +22,45 @@ export default function DateInput() {
 		return new Date(currentYear, currentMonth, daysInMonth()).getDay() - 1
 	}
 
+	const minDate = new Date(min)
+	const maxDate = new Date(max)
+
+	const years = Array.from({ length: maxDate.getFullYear() - minDate.getFullYear() + 1 }, (x, i) => (maxDate.getFullYear() - i).toString())
+
+	const inputRef = useRef(null)
+
 	const [currentMonth, setCurrentMonth] = useState(1)
 	const [currentYear, setCurrentYear] = useState(new Date().getFullYear())
+	const [displayYear, setDisplayYear] = useState(new Date().getFullYear())
 	const [selected, setSelected] = useState(null)
+
+	const compareDate = date => {
+		if (selected === null) return false
+		return selected.day === date.getDate() && selected.month === date.getMonth() && selected.year === date.getFullYear()
+	}
+
+	const dateIsValid = date => {
+		return date >= minDate && date <= maxDate
+	}
+
+	const formatDate = date => {
+		const twoDigits = num => {
+			const str = num.toString()
+			return str.length < 2 ? '0' + str : str
+		}
+		const day = twoDigits(date.getDate())
+		const month = twoDigits(date.getMonth() + 1)
+		const year = twoDigits(date.getFullYear())
+		return year + '-' + month + '-' + day
+	}
 
 	const handleNextMonth = e => {
 		e.preventDefault()
 		if (currentMonth === 11) {
 			setCurrentMonth(0)
-			setCurrentYear(currentYear + 1)
+			const newYear = currentYear + 1
+			setCurrentYear(newYear)
+			setDisplayYear(newYear)
 		} else {
 			setCurrentMonth(currentMonth + 1)
 		}
@@ -39,11 +69,12 @@ export default function DateInput() {
 		e.preventDefault()
 		if (currentMonth === 0) {
 			setCurrentMonth(11)
-			setCurrentYear(currentYear - 1)
+			const newYear = currentYear - 1
+			setCurrentYear(newYear)
+			setDisplayYear(newYear)
 		} else {
 			setCurrentMonth(currentMonth - 1)
 		}
-		console.log(currentYear)
 	}
 
 	const handleSelectYear = (id, value) => {
@@ -52,24 +83,34 @@ export default function DateInput() {
 
 	const handleSelect = (e, date) => {
 		e.preventDefault()
-		console.log(date)
-		setSelected({ day: date.toLocaleDateString({ day: 'numeric' }), month: date.getMonth(), year: date.getFullYear() })
-		console.log(selected)
+		if (dateIsValid(date)) {
+			setSelected({ day: date.getDate(), month: date.getMonth(), year: date.getFullYear() })
+			inputRef.current.value = formatDate(date)
+		}
 	}
-	const compareDate = date => {
-		if (selected === null) return false
-		return selected.day === date.toLocaleDateString({ day: 'numeric' }) && selected.month === date.getMonth() && selected.year === date.getFullYear()
+
+	const handleChange = e => {
+		const date = new Date(e.target.value)
+		if (dateIsValid(date)) {
+			setSelected({ day: date.getDate(), month: date.getMonth(), year: date.getFullYear() })
+			setCurrentMonth(date.getMonth())
+			setCurrentYear(date.getFullYear())
+			setDisplayYear(date.getFullYear())
+			console.log('date change', e.target.value)
+		}
 	}
+
 	const buttonDay = date => {
 		return (
 			<button onClick={e => handleSelect(e, date)} className={compareDate(date) ? 'selected' : ''}>
-				{date.toLocaleDateString('fr-FR', { day: 'numeric' })}
+				{date.getDate()}
 			</button>
 		)
 	}
+
 	return (
 		<StyledDateInput>
-			<input type="date" />
+			<input type="date" onChange={handleChange} ref={inputRef} />
 			<div className="datePicker">
 				<header>
 					<div className="monthInput">
@@ -87,12 +128,7 @@ export default function DateInput() {
 							</svg>
 						</button>
 					</div>
-					<DropDown
-						className="yearInput"
-						listItem={['2024', '2023', '2022', '2021', '2020', '2019', '2018', '2017']}
-						selected={currentYear.toString()}
-						handleSelect={handleSelectYear}
-					/>
+					<DropDown className="yearInput" listItem={years} selected={displayYear.toString()} handleSelect={handleSelectYear} />
 				</header>
 				<div className="daysContainer">
 					<ul className="daysNames">
@@ -105,20 +141,24 @@ export default function DateInput() {
 							let d = new Date(currentYear, currentMonth, i + 1)
 							d.setDate(d.getDate() - firstDayInMonth())
 							return (
-								<li key={i} className="grey">
+								<li key={i} className={dateIsValid(d) ? 'grey' : 'invalid'}>
 									{buttonDay(d)}
 								</li>
 							)
 						})}
 						{Array.from({ length: daysInMonth() }, (x, i) => {
 							const d = new Date(currentYear, currentMonth, i + 1)
-							return <li key={i}>{buttonDay(d)}</li>
+							return (
+								<li key={i} className={dateIsValid(d) ? '' : 'invalid'}>
+									{buttonDay(d)}
+								</li>
+							)
 						})}
 						{Array.from({ length: 6 - lastDayInMonth() }, (x, i) => {
 							let d = new Date(currentYear, currentMonth, i)
 							d.setDate(d.getDate() + daysInMonth() + 1)
 							return (
-								<li key={i} className="grey">
+								<li key={i} className={dateIsValid(d) ? 'grey' : 'invalid'}>
 									{buttonDay(d)}
 								</li>
 							)

@@ -24,6 +24,8 @@ export const StyledDateInput = styled.div`
 		position: absolute;
 		top: 2rem;
 		min-width: 200px;
+		border: 1px solid #cccccc;
+
 		header {
 			display: flex;
 			background: #ededed;
@@ -55,7 +57,6 @@ export const StyledDateInput = styled.div`
 		}
 		.daysContainer {
 			padding: 0.2rem;
-			border: 1px solid black;
 			box-sizing: border-box;
 			width: 100%;
 			background: #ffff;
@@ -79,17 +80,24 @@ export const StyledDateInput = styled.div`
 					width: 100%;
 					border-radius: 2px;
 					color: black;
+					cursor: pointer;
 				}
 				li.grey {
 					background: #ededed;
 					color: grey;
 				}
+				li.invalid {
+					background: #ededed;
+					color: grey;
+					opacity: 0.4;
+					cursor: not-allowed;
+				}
 				button {
 					width: 100%;
 					background: none;
 					border: none;
-					cursor: pointer;
 					color: inherit;
+					cursor: inherit;
 					&.selected {
 						outline: 1px solid black;
 					}

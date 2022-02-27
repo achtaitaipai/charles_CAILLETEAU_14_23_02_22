@@ -93,6 +93,7 @@ export default function DropDown({ listItem, selected = 0, handleSelect }) {
 	}
 	const selectItem = id => {
 		setSelectedItem(getSelected(id))
+		// selected = id
 		close()
 		if (handleSelect !== undefined) {
 			handleSelect(id, listItem[id])
@@ -102,8 +103,7 @@ export default function DropDown({ listItem, selected = 0, handleSelect }) {
 	return (
 		<StyledDropDown className="dropdown" ref={dropDownRef} onKeyDown={expanded ? handleKeyDown : null}>
 			<button className="selected" ref={selectedRef} onClick={selectClick} aria-haspopup="listbox" aria-expanded={expanded}>
-				{' '}
-				{selectedItem}{' '}
+				{selectedItem}
 				<svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
 					{expanded ? <polygon points="0 9, 10 9, 5 2" /> : <polygon points="0 1, 10 1, 5 8" />}
 				</svg>
