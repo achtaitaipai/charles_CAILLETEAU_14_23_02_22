@@ -16,7 +16,6 @@ export default function CreateEmployee() {
 					<DropDown
 						listItem={['1er', 'long texte blablabla machin', '3em', '4em', '1er', '2em', '3em', '4em', '1er', '2em', '3em', '4em', '1er', '2em', '3em', '4em']}
 						selected={'2em'}
-						handleSelect={(id, value) => alert(id + ' ' + value)}
 					></DropDown>
 					<DateInput />
 					<label>

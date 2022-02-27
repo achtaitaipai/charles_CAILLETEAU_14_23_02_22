@@ -49,16 +49,33 @@ export default function DropDown({ listItem, selected = 0, handleSelect }) {
 			close()
 		} else if (e.code === 'ArrowDown') {
 			e.preventDefault()
-			setCurrentItem(Math.min(currentItem + 1, listItem.length - 1))
+			const newCurrentItem = Math.min(currentItem + 1, listItem.length - 1)
+			setCurrentItem(newCurrentItem)
+			scrollToEl(newCurrentItem)
 		} else if (e.code === 'ArrowUp' && currentItem !== -1) {
 			e.preventDefault()
-			setCurrentItem(Math.max(currentItem - 1, 0))
+			const newCurrentItem = Math.max(currentItem - 1, 0)
+			setCurrentItem(newCurrentItem)
+			scrollToEl(newCurrentItem)
 		} else if (e.code === 'Space' || e.code === 'Enter') {
 			e.preventDefault()
 			if (currentItem >= 0) {
 				selectItem(currentItem)
 			}
 			close()
+		}
+	}
+
+	const scrollToEl = id => {
+		const el = listBoxRef.current.querySelector(`[data-value="${id}"]`)
+		const pTop = el.offsetTop - listBoxRef.current.scrollTop
+		const pBottom = pTop + el.offsetHeight
+		const frameHeight = listBoxRef.current.offsetHeight
+		if (pBottom > frameHeight) {
+			listBoxRef.current.scrollTo(0, el.offsetTop + el.offsetHeight - frameHeight)
+		}
+		if (pTop < 0) {
+			listBoxRef.current.scrollTo(0, el.offsetTop)
 		}
 	}
 
