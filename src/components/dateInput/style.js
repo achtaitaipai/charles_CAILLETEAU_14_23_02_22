@@ -104,5 +104,12 @@ export const StyledDateInput = styled.div`
 				}
 			}
 		}
+		.todayBtn {
+			margin: 0.5rem 0;
+			background: none;
+			border: none;
+			cursor: pointer;
+			color: #007fff;
+		}
 	}
 `
