@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import DropDown from '../dropdown/DropDown'
 import { StyledDateInput } from './style'
 
-export default function DateInput({ min, max }) {
+export default function DateInput({ min, max = new Date(), handleChange }) {
 	const monthName = n => {
 		const date = new Date(0, n, 0)
 		return date.toLocaleDateString('fr-FR', { month: 'long' })
@@ -21,34 +21,6 @@ export default function DateInput({ min, max }) {
 	const lastDayInMonth = () => {
 		return new Date(currentYear, currentMonth, daysInMonth()).getDay() - 1
 	}
-
-	let minDate = new Date(min)
-	minDate.setDate(minDate.getDate() - 1)
-	const maxDate = new Date(max)
-
-	const years = Array.from({ length: maxDate.getFullYear() - minDate.getFullYear() + 1 }, (x, i) => (maxDate.getFullYear() - i).toString())
-
-	const inputRef = useRef(null)
-
-	const [currentMonth, setCurrentMonth] = useState(1)
-	const [currentYear, setCurrentYear] = useState(new Date().getFullYear())
-	const [displayYear, setDisplayYear] = useState(new Date().getFullYear())
-	const [selected, setSelected] = useState(null)
-	const [expanded, setExpanded] = useState(false)
-
-	const dateInputRef = useRef(null)
-
-	useEffect(() => {
-		const handleClickOutside = e => {
-			if (dateInputRef.current && !dateInputRef.current.contains(e.target)) {
-				setExpanded(false)
-			}
-		}
-		document.addEventListener('click', handleClickOutside, true)
-		return () => {
-			document.removeEventListener('click', handleClickOutside, true)
-		}
-	}, [])
 
 	const compareDate = date => {
 		if (selected === null) return false
@@ -69,6 +41,40 @@ export default function DateInput({ min, max }) {
 		const year = twoDigits(date.getFullYear())
 		return year + '-' + month + '-' + day
 	}
+	let minDate
+	if (min) {
+		minDate = new Date(min)
+		minDate.setDate(minDate.getDate() - 1)
+	} else {
+		minDate = new Date(max)
+		minDate.setFullYear(minDate.getFullYear() - 100)
+	}
+	const maxDate = new Date(max)
+
+	const years = Array.from({ length: maxDate.getFullYear() - minDate.getFullYear() + 1 }, (x, i) => (maxDate.getFullYear() - i).toString())
+
+	const inputRef = useRef(null)
+
+	const [currentMonth, setCurrentMonth] = useState(dateIsValid(new Date()) ? new Date().getMonth() : 0)
+	const year = dateIsValid(new Date()) ? new Date().getFullYear() : maxDate.getFullYear()
+	const [currentYear, setCurrentYear] = useState(year)
+	const [displayYear, setDisplayYear] = useState(year)
+	const [selected, setSelected] = useState(null)
+	const [expanded, setExpanded] = useState(false)
+
+	const dateInputRef = useRef(null)
+
+	useEffect(() => {
+		const handleClickOutside = e => {
+			if (dateInputRef.current && !dateInputRef.current.contains(e.target)) {
+				setExpanded(false)
+			}
+		}
+		document.addEventListener('click', handleClickOutside, true)
+		return () => {
+			document.removeEventListener('click', handleClickOutside, true)
+		}
+	}, [])
 
 	const handleNextMonth = e => {
 		e.preventDefault()
@@ -123,16 +129,22 @@ export default function DateInput({ min, max }) {
 		if (dateIsValid(date)) {
 			setSelected({ day: date.getDate(), month: date.getMonth(), year: date.getFullYear() })
 			inputRef.current.value = formatDate(date)
+			if (handleChange) {
+				handleChange(date)
+			}
 		}
 	}
 
-	const handleChange = e => {
+	const handleInputChange = e => {
 		const date = new Date(e.target.value)
 		if (dateIsValid(date)) {
 			setSelected({ day: date.getDate(), month: date.getMonth(), year: date.getFullYear() })
 			setCurrentMonth(date.getMonth())
 			setCurrentYear(date.getFullYear())
 			setDisplayYear(date.getFullYear())
+			if (handleChange) {
+				handleChange(date)
+			}
 		}
 	}
 
@@ -167,7 +179,7 @@ export default function DateInput({ min, max }) {
 
 	return (
 		<StyledDateInput ref={dateInputRef} onKeyDown={handleKeyDown}>
-			<input type="date" onChange={handleChange} onFocus={open} onClick={open} ref={inputRef} />
+			<input type="date" onChange={handleInputChange} onFocus={open} onClick={open} ref={inputRef} />
 			{expanded && (
 				<div className="datePicker">
 					<header>
@@ -222,9 +234,11 @@ export default function DateInput({ min, max }) {
 								)
 							})}
 						</ul>
-						<button className="todayBtn" onClick={handleToday}>
-							Aujourd'hui
-						</button>
+						{dateIsValid(new Date()) && (
+							<button className="todayBtn" onClick={handleToday}>
+								Aujourd'hui
+							</button>
+						)}
 					</div>
 				</div>
 			)}

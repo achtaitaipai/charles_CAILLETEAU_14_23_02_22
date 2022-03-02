@@ -17,7 +17,13 @@ export default function CreateEmployee() {
 						listItem={['1er', 'long texte blablabla machin', '3em', '4em', '1er', '2em', '3em', '4em', '1er', '2em', '3em', '4em', '1er', '2em', '3em', '4em']}
 						selected={'2em'}
 					></DropDown>
-					<DateInput min="1992-08-23" max="2023-06-01" />
+					<DateInput
+						min="1992-08-23"
+						max="2015-06-01"
+						handleChange={d => {
+							console.log(d)
+						}}
+					/>
 					<label>
 						First Name
 						<input type="text" name="firstName"></input>
