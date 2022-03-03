@@ -10,7 +10,7 @@ header {
 form {
 	display: flex;
 	flex-direction: column;
-	width: max(50%, 400px);
+	width: max(25%, 400px);
 	margin: auto;
 }
 
@@ -25,11 +25,9 @@ fieldset {
 	flex-direction: column;
 }
 
-input,
-select {
-	width: 50%;
-}
-
 input[type='submit'] {
 	align-self: center;
+}
+h1 {
+	text-align: center;
 }

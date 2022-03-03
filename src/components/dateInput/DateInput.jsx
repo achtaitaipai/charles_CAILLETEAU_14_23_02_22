@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import DropDown from '../dropdown/DropDown'
 import { StyledDateInput } from './style'
 
-export default function DateInput({ min, max = new Date(), handleChange }) {
+export default function DateInput({ min, max, handleChange }) {
 	const monthName = n => {
 		const date = new Date(0, n, 0)
 		return date.toLocaleDateString('fr-FR', { month: 'long' })
@@ -28,6 +28,9 @@ export default function DateInput({ min, max = new Date(), handleChange }) {
 	}
 
 	const dateIsValid = date => {
+		if (date < minDate) return false
+		if (date > maxDate) return false
+		return true
 		return date >= minDate && date <= maxDate
 	}
 
@@ -41,15 +44,19 @@ export default function DateInput({ min, max = new Date(), handleChange }) {
 		const year = twoDigits(date.getFullYear())
 		return year + '-' + month + '-' + day
 	}
-	let minDate
+	let minDate, maxDate
 	if (min) {
 		minDate = new Date(min)
 		minDate.setDate(minDate.getDate() - 1)
 	} else {
-		minDate = new Date(max)
+		minDate = new Date()
 		minDate.setFullYear(minDate.getFullYear() - 100)
 	}
-	const maxDate = new Date(max)
+	if (max) {
+		maxDate = new Date(max)
+	} else {
+		maxDate = new Date()
+	}
 
 	const years = Array.from({ length: maxDate.getFullYear() - minDate.getFullYear() + 1 }, (x, i) => (maxDate.getFullYear() - i).toString())
 
@@ -130,7 +137,7 @@ export default function DateInput({ min, max = new Date(), handleChange }) {
 			setSelected({ day: date.getDate(), month: date.getMonth(), year: date.getFullYear() })
 			inputRef.current.value = formatDate(date)
 			if (handleChange) {
-				handleChange(date)
+				handleChange(formatDate(date))
 			}
 		}
 	}
@@ -143,7 +150,7 @@ export default function DateInput({ min, max = new Date(), handleChange }) {
 			setCurrentYear(date.getFullYear())
 			setDisplayYear(date.getFullYear())
 			if (handleChange) {
-				handleChange(date)
+				handleChange(formatDate(date))
 			}
 		}
 	}
@@ -178,7 +185,7 @@ export default function DateInput({ min, max = new Date(), handleChange }) {
 	}
 
 	return (
-		<StyledDateInput ref={dateInputRef} onKeyDown={handleKeyDown}>
+		<StyledDateInput ref={dateInputRef} onKeyDown={handleKeyDown} className="dateInput">
 			<input type="date" onChange={handleInputChange} onFocus={open} onClick={open} ref={inputRef} />
 			{expanded && (
 				<div className="datePicker">
@@ -234,11 +241,9 @@ export default function DateInput({ min, max = new Date(), handleChange }) {
 								)
 							})}
 						</ul>
-						{dateIsValid(new Date()) && (
-							<button className="todayBtn" onClick={handleToday}>
-								Aujourd'hui
-							</button>
-						)}
+						<button className="todayBtn" onClick={handleToday}>
+							Aujourd'hui
+						</button>
 					</div>
 				</div>
 			)}

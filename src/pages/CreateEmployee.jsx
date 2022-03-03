@@ -1,9 +1,26 @@
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import '../assets/style.css'
 import DateInput from '../components/dateInput/DateInput'
 import DropDown from '../components/dropdown/DropDown'
+import { states } from '../assets/USstates'
 
-export default function CreateEmployee() {
+export default function CreateEmployee({ handleSubmit }) {
+	const statesNames = states.map(s => s.name)
+	const stateAbbreviation = name => states.find(s => s.name === name)?.abbreviation
+
+	const navigate = useNavigate()
+
+	const [firstName, setFirstName] = useState('')
+	const [lastName, setLastName] = useState('')
+	const [birthDate, setBirthDate] = useState('')
+	const [startDate, setStartDate] = useState('')
+	const [street, setStreet] = useState('')
+	const [city, setCity] = useState('')
+	const [state, setState] = useState(statesNames[0])
+	const [zipCode, setZipCode] = useState('')
+	const [department, setDepartment] = useState('Sales')
+
 	return (
 		<>
 			<header>
@@ -12,62 +29,83 @@ export default function CreateEmployee() {
 				<h2>Create Employee</h2>
 			</header>
 			<main>
-				<form>
-					<DropDown
-						listItem={['1er', 'long texte blablabla machin', '3em', '4em', '1er', '2em', '3em', '4em', '1er', '2em', '3em', '4em', '1er', '2em', '3em', '4em']}
-						selected={'2em'}
-					></DropDown>
-					<DateInput
-						min="1992-08-23"
-						max="2015-06-01"
-						handleChange={d => {
-							console.log(d)
-						}}
-					/>
+				<form
+					onSubmit={e => {
+						e.preventDefault()
+						console.log(firstName, lastName, birthDate, startDate, street, city, state, zipCode, department)
+						const newEmployee = {
+							firstName,
+							lastName,
+							birthDate,
+							startDate,
+							street,
+							city,
+							state,
+							zipCode,
+							department,
+						}
+						handleSubmit(newEmployee)
+						navigate('/employee-list')
+					}}
+				>
 					<label>
 						First Name
-						<input type="text" name="firstName"></input>
+						<input type="text" name="firstName" value={firstName} onChange={e => setFirstName(e.target.value)}></input>
 					</label>
 					<label>
 						Last Name
-						<input type="text" name="lastName"></input>
+						<input type="text" name="lastName" value={lastName} onChange={e => setLastName(e.target.value)}></input>
 					</label>
 					<label>
 						Date of Birth
-						<input type="date" name="dateOfBirth"></input>
+						<DateInput
+							handleChange={d => {
+								setBirthDate(d)
+							}}
+						/>
 					</label>
 					<label>
 						Start Date
-						<input type="date" name="startDate"></input>
+						<DateInput
+							handleChange={d => {
+								setStartDate(d)
+							}}
+						/>
 					</label>
 					<fieldset>
 						<legend>Adress</legend>
 						<label>
 							Street
-							<input type="text" name="street"></input>
+							<input type="text" name="street" value={street} onChange={e => setStreet(e.target.value)}></input>
 						</label>
 						<label>
 							City
-							<input type="text" name="city"></input>
+							<input type="text" name="city" value={city} onChange={e => setCity(e.target.value)}></input>
 						</label>
 						<label>
 							State
-							<select name="state">
-								<option value="alabama">Alabama</option>
-								<option value="newyork">NewYork</option>
-							</select>
+							<DropDown
+								listItem={statesNames}
+								selected={'2em'}
+								handleSelect={(id, value) => {
+									setState(stateAbbreviation(value))
+								}}
+							></DropDown>
 						</label>
 						<label>
 							Zip Code
-							<input type="number" name="zipCode"></input>
+							<input type="number" name="zipCode" value={zipCode} onChange={e => setZipCode(e.target.value)}></input>
 						</label>
 					</fieldset>
 					<label>
 						Department
-						<select name="department">
-							<option value="sales">Sales</option>
-							<option value="marketing">Marketing</option>
-						</select>
+						<DropDown
+							listItem={['Sales', 'Marketing', 'Engineering', 'Human Resources', 'Legal']}
+							selected={'2em'}
+							handleSelect={(id, value) => {
+								setDepartment(value)
+							}}
+						></DropDown>
 					</label>
 					<input type="submit" value="Save" />
 				</form>

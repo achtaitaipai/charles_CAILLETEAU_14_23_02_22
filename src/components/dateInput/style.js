@@ -25,6 +25,7 @@ export const StyledDateInput = styled.div`
 		top: 2rem;
 		min-width: 200px;
 		border: 1px solid #cccccc;
+		z-index: 1000;
 
 		header {
 			display: flex;
