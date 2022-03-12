@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import Table from '../components/Table/Table'
 
 export default function EmployeeList({ list }) {
@@ -9,6 +10,9 @@ export default function EmployeeList({ list }) {
 				keys={['firstName', 'lastName', 'startDate', 'department', 'birthDate', 'street', 'city', 'state', 'zipCode']}
 				labels={['First Name', 'Last Name', 'Start Date', 'Department', 'Date of Birth', 'Street', 'City', 'State', 'Zip Code']}
 			/>
+			<Link to="/" className="home">
+				Home
+			</Link>
 		</>
 	)
 }

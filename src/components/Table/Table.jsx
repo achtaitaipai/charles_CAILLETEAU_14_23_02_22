@@ -24,9 +24,14 @@ export default function Table({ list, keys, labels }) {
 		setSearch(value)
 		const arr = filterSearch(sortedList, value)
 		setFilteredList(arr)
-		setCurrentPage(Math.min(currentPage, Math.ceil(arr.length / nEntrie)))
+		setCurrentPage(Math.max(1, Math.min(currentPage, Math.ceil(arr.length / nEntrie))))
 	}
-	const sort = (k, dir = 1) => {
+	const handleSort = (e, k, dir = 1) => {
+		const button = e.target.closest('button')
+		const container = e.target.closest('tr')
+		const active = container.querySelector('.active')
+		active?.classList.remove('active')
+		button.classList.add('active')
 		const arr = [...list].sort((a, b) => dir * a[k].toString().localeCompare(b[k].toString()))
 		setSortedList(arr)
 		setFilteredList(filterSearch(arr, search))
@@ -72,12 +77,12 @@ export default function Table({ list, keys, labels }) {
 									<div className="key">
 										{k}
 										<div className="btns">
-											<button onClick={() => sort(keys[index])} type="button">
+											<button onClick={e => handleSort(e, keys[index])} type="button">
 												<svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
 													<polygon points="0 9, 10 9, 5 2" />
 												</svg>
 											</button>
-											<button onClick={() => sort(keys[index], -1)} type="button">
+											<button onClick={e => handleSort(e, keys[index], -1)} type="button">
 												<svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
 													<polygon points="0 1, 10 1, 5 8" />
 												</svg>
@@ -99,31 +104,38 @@ export default function Table({ list, keys, labels }) {
 							</tr>
 						)
 					})}
+					{filteredList.length === 0 && (
+						<tr>
+							<td colSpan={keys.length}>No matching records found</td>
+						</tr>
+					)}
 				</tbody>
 			</table>
-			<footer>
-				<p>
-					Showing {(currentPage - 1) * nEntrie + 1} to {Math.min((currentPage - 1) * nEntrie + nEntrie, filteredList.length)} of {filteredList.length} entries
-					{search !== '' && ` (filtered from ${list.length} total entries)`}
-				</p>
-				<div className="pages">
-					<button onClick={handlePrev} type="button" disabled={currentPage === 1}>
-						Previous
-					</button>
-					<ul>
-						{Array.from({ length: nPage() }, (itm, idx) => (
-							<li key={idx}>
-								<button className={currentPage === idx + 1 ? 'currentPage' : ''} onClick={() => setCurrentPage(idx + 1)}>
-									{idx + 1}
-								</button>
-							</li>
-						))}
-					</ul>
-					<button onClick={handleNext} type="button" disabled={currentPage === nPage()}>
-						Next
-					</button>
-				</div>
-			</footer>
+			{filteredList.length > 0 && (
+				<footer>
+					<p>
+						Showing {(currentPage - 1) * nEntrie + 1} to {Math.min((currentPage - 1) * nEntrie + nEntrie, filteredList.length)} of {filteredList.length} entries
+						{search !== '' && ` (filtered from ${list.length} total entries)`}
+					</p>
+					<div className="pages">
+						<button onClick={handlePrev} type="button" disabled={currentPage === 1}>
+							Previous
+						</button>
+						<ul>
+							{Array.from({ length: nPage() }, (itm, idx) => (
+								<li key={idx}>
+									<button className={currentPage === idx + 1 ? 'currentPage' : ''} onClick={() => setCurrentPage(idx + 1)}>
+										{idx + 1}
+									</button>
+								</li>
+							))}
+						</ul>
+						<button onClick={handleNext} type="button" disabled={currentPage === nPage()}>
+							Next
+						</button>
+					</div>
+				</footer>
+			)}
 		</StyledDataTable>
 	)
 }

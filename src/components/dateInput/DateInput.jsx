@@ -186,7 +186,7 @@ export default function DateInput({ min, max, handleChange }) {
 
 	return (
 		<StyledDateInput ref={dateInputRef} onKeyDown={handleKeyDown} className="dateInput">
-			<input type="date" onChange={handleInputChange} onFocus={open} onClick={open} ref={inputRef} />
+			<input type="date" onChange={handleInputChange} onFocus={open} onClick={open} onTouchStart={open} ref={inputRef} />
 			{expanded && (
 				<div className="datePicker">
 					<header>

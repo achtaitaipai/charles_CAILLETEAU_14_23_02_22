@@ -18,6 +18,7 @@ export const StyledDataTable = styled.div`
 	table {
 		width: 100%;
 		border-collapse: collapse;
+		margin-bottom: 1rem;
 		th {
 			.key {
 				display: flex;
@@ -46,7 +47,8 @@ export const StyledDataTable = styled.div`
 				width: 100%;
 				height: 100%;
 			}
-			button:hover svg {
+			button:hover svg,
+			button.active svg {
 				filter: invert(34%) sepia(87%) saturate(3112%) hue-rotate(197deg) brightness(102%) contrast(107%);
 			}
 		}
