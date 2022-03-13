@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import '../assets/style.css'
 import DateInput from '../components/dateInput/DateInput'
 import DropDown from '../components/dropdown/DropDown'
 import { states } from '../assets/USstates'
+import { Modal } from '@achtaitaipai/modal-reactjs-component'
 
 export default function CreateEmployee({ handleSubmit }) {
 	const statesNames = states.map(s => s.name)
@@ -20,6 +21,7 @@ export default function CreateEmployee({ handleSubmit }) {
 	const [state, setState] = useState(statesNames[0])
 	const [zipCode, setZipCode] = useState('')
 	const [department, setDepartment] = useState('Sales')
+	const modalRef = useRef()
 
 	return (
 		<>
@@ -45,7 +47,7 @@ export default function CreateEmployee({ handleSubmit }) {
 							department,
 						}
 						handleSubmit(newEmployee)
-						navigate('/employee-list')
+						modalRef.current.open()
 					}}
 				>
 					<label>
@@ -109,6 +111,13 @@ export default function CreateEmployee({ handleSubmit }) {
 					</label>
 					<input type="submit" value="Save" />
 				</form>
+				<Modal
+					ref={modalRef}
+					title="Création d'un employé"
+					message={"L'employé a bien été ajouté à la liste"}
+					onConfirm={() => navigate('/employee-list')}
+					onClose={() => console.log('oe')}
+				/>
 			</main>
 		</>
 	)
