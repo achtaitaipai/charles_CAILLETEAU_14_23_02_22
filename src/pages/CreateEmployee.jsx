@@ -18,7 +18,7 @@ export default function CreateEmployee({ handleSubmit }) {
 	const [startDate, setStartDate] = useState('')
 	const [street, setStreet] = useState('')
 	const [city, setCity] = useState('')
-	const [state, setState] = useState(statesNames[0])
+	const [state, setState] = useState('AL')
 	const [zipCode, setZipCode] = useState('')
 	const [department, setDepartment] = useState('Sales')
 	const modalRef = useRef()
@@ -92,6 +92,7 @@ export default function CreateEmployee({ handleSubmit }) {
 								handleSelect={(id, value) => {
 									setState(stateAbbreviation(value))
 								}}
+								label="State"
 							></DropDown>
 						</label>
 						<label>
@@ -107,17 +108,14 @@ export default function CreateEmployee({ handleSubmit }) {
 							handleSelect={(id, value) => {
 								setDepartment(value)
 							}}
+							label="Department"
 						></DropDown>
 					</label>
 					<input type="submit" value="Save" />
 				</form>
-				<Modal
-					ref={modalRef}
-					title="Création d'un employé"
-					message={"L'employé a bien été ajouté à la liste"}
-					onConfirm={() => navigate('/employee-list')}
-					onClose={() => console.log('oe')}
-				/>
+				<Modal ref={modalRef} title="New Employee" onConfirm={() => navigate('/employee-list')} confirmBtn={'Ok'}>
+					<p>Employee created</p>
+				</Modal>
 			</main>
 		</>
 	)

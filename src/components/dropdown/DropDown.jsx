@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import React from 'react'
 import { StyledDropDown } from './style.js'
 
-export default function DropDown({ listItem, selected = 0, handleSelect }) {
+export default function DropDown({ listItem, selected = 0, handleSelect, label }) {
 	const getSelected = slt => {
 		if (typeof slt === 'string') {
 			return listItem.find(el => el === slt) ? listItem.find(el => el === slt) : listItem[0]
@@ -102,13 +102,14 @@ export default function DropDown({ listItem, selected = 0, handleSelect }) {
 
 	return (
 		<StyledDropDown className="dropdown" ref={dropDownRef} onKeyDown={expanded ? handleKeyDown : null}>
-			<button className="selected" ref={selectedRef} onClick={selectClick} aria-haspopup="listbox" aria-expanded={expanded}>
+			<button className="selected" ref={selectedRef} onClick={selectClick} aria-expanded={expanded}>
 				{selectedItem}
 				<svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
+					<title>deploy</title>
 					{expanded ? <polygon points="0 9, 10 9, 5 2" /> : <polygon points="0 1, 10 1, 5 8" />}
 				</svg>
 			</button>
-			<ul role="listbox" tabIndex={-1} ref={listBoxRef} style={{ opacity: expanded ? '1' : '0' }}>
+			<ul role="listbox" aria-haspopup="listbox" aria-label={label} tabIndex={-1} ref={listBoxRef} style={{ opacity: expanded ? '1' : '0' }}>
 				{expanded &&
 					listItem.map((item, id) => {
 						return (

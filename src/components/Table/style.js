@@ -1,14 +1,39 @@
 import styled from 'styled-components'
+const numOfCols = () => {
+	let style = ''
+	for (let i = 0; i < 7; i++) {
+		style += `
+			th,
+			td {
+				@media screen and (max-width: ${1100 - i * 100}px) {
+					:nth-child(1n + ${9 - i}) {
+						display: none;
+					}
+				}
+			}
+		`
+	}
+	return style
+}
 
 export const StyledDataTable = styled.div`
-	width: 80%;
-	margin: auto;
+	margin: 0 5%;
+	overflow-x: auto;
+	${numOfCols()}
 	header {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 		flex-direction: row-gap;
 		width: 100%;
+		@media screen and (max-width: 550px) {
+			flex-direction: column;
+			gap: 2rem;
+			label {
+				margin-right: auto;
+				margin: 1rem;
+			}
+		}
 		label {
 			display: flex;
 			flex-direction: row;
@@ -26,6 +51,7 @@ export const StyledDataTable = styled.div`
 				gap: 1rem;
 				justify-content: center;
 				align-items: color-interpolation-filters;
+				white-space: nowrap;
 			}
 			.btns {
 				display: flex;
@@ -77,6 +103,9 @@ export const StyledDataTable = styled.div`
 		flex-direction: row;
 		align-items: center;
 		justify-content: space-between;
+		@media screen and (max-width: 650px) {
+			flex-direction: column;
+		}
 		.pages {
 			display: flex;
 			align-items: center;
@@ -101,3 +130,15 @@ export const StyledDataTable = styled.div`
 		}
 	}
 `
+// for (let i = 0; i < 5; i++) {
+// 	StyledDataTable += `
+// 	th,
+// 	td {
+// 		@media screen and (max-width: ${1100 - i * 100}px) {
+// 			:nth-child(1n + ${9 - i}) {
+// 				display: none;
+// 			}
+// 		}
+// 	}
+// 	`
+// }

@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@achtaitaipai/modal-reactjs-component@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@achtaitaipai/modal-reactjs-component/-/modal-reactjs-component-1.1.1.tgz#11c1bb8fbf299cde0bb67ccc2297c5dc9c1774e8"
-  integrity sha512-WuKx00TFGnVivczoJK5UCKAZP4ekbTeZ8GvRTRPsm7RR+aCoGe5C4nt8h8mE3wfdKxLyM1OGzScCu1Jf7sm2vw==
+"@achtaitaipai/modal-reactjs-component@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@achtaitaipai/modal-reactjs-component/-/modal-reactjs-component-2.0.1.tgz#a778c40f52c778e8f9ca861d356c3857e0800df8"
+  integrity sha512-HhEbGpXikU7nnZlXX44EfBiLpxmcH8AMQlrpZELydkoOglNptUZV1Uc3zwhI+aREJbvNbT+OBI1b/3Gw71H2Qw==
 
 "@ampproject/remapping@^2.1.0":
   version "2.1.2"

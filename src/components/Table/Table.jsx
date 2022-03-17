@@ -54,7 +54,7 @@ export default function Table({ list, keys, labels }) {
 			<header>
 				<label>
 					Show
-					<DropDown listItem={['10', '25', '50', '100']} handleSelect={(id, value) => handleNEntries(value)} />
+					<DropDown listItem={['10', '25', '50', '100']} handleSelect={(id, value) => handleNEntries(value)} label="number of entries" />
 					entries
 				</label>
 				<label>
@@ -77,13 +77,15 @@ export default function Table({ list, keys, labels }) {
 									<div className="key">
 										{k}
 										<div className="btns">
-											<button onClick={e => handleSort(e, keys[index])} type="button">
+											<button onClick={e => handleSort(e, keys[index])} type="button" aria-label="ascending sort">
 												<svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
+													<title>ascending sort</title>
 													<polygon points="0 9, 10 9, 5 2" />
 												</svg>
 											</button>
-											<button onClick={e => handleSort(e, keys[index], -1)} type="button">
+											<button onClick={e => handleSort(e, keys[index], -1)} type="button" aria-label="descending sort">
 												<svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
+													<title>descending sort</title>
 													<polygon points="0 1, 10 1, 5 8" />
 												</svg>
 											</button>
