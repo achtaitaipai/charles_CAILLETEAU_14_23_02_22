@@ -1,21 +1,33 @@
+* {
+	box-sizing: border-box;
+}
 html {
 	font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 header {
-	width: 40%;
-	margin: auto;
+	max-width: 100%;
+	padding-inline: 30%;
 	text-align: center;
+}
+main {
+	max-width: 100%;
+	padding-inline: 30%;
+}
+@media (max-width: 560px) {
+	main {
+		padding-inline: 10%;
+	}
 }
 
 form {
 	display: flex;
 	flex-direction: column;
-	width: max(25%, 400px);
-	margin: auto;
+	width: 100%;
+	/* margin-inline: 10%; */
 }
 
 label {
-	margin: 1rem;
+	margin-block: 1.3125rem;
 	display: flex;
 	flex-direction: column;
 	gap: 0.3125rem;
@@ -27,6 +39,7 @@ fieldset {
 
 input[type='submit'] {
 	align-self: center;
+	max-width: 80%;
 }
 h1 {
 	text-align: center;
