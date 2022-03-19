@@ -26,6 +26,7 @@ export const StyledDataTable = styled.div`
 		align-items: center;
 		flex-direction: row-gap;
 		width: 100%;
+		padding: 0;
 		@media screen and (max-width: 550px) {
 			flex-direction: column;
 			gap: 2rem;
